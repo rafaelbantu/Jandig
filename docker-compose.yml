@@ -37,6 +37,8 @@ services:
       - "traefik.http.middlewares.django-retry.retry.attempts=5"
       - "traefik.http.middlewares.django-retry.retry.initialInterval=100ms"
       - "traefik.http.routers.django.middlewares=django-retry@docker"
+      - "traefik.http.routers.apache.entrypoints=http"
+      - "traefik.http.routers.apache.rule=Host(`jandig.example.com`)"
 
   postgres:
     image: postgres:16.8
@@ -51,13 +53,14 @@ services:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready", "-d", "jandig"]
-      interval: 5s
-      timeout: 60s
+      interval: 10s
+      timeout: 5s
       retries: 20
-      start_interval: 5s
+      start_period: 30s
+      start_interval: 2s
   
   storage:
-    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+    image: quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z
     ports:
       - 9000:9000
       - 9001:9001
@@ -96,7 +99,7 @@ services:
       MP_SMTP_TLS_KEY: /self_signed/mailpit_key.pem
 
   traefik:
-    image: traefik:v3.3.5
+    image: traefik:v3.6
     ports:
       - "80:80"
     volumes:

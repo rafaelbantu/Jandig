@@ -59,7 +59,8 @@ FROM base AS local_dev
 ENV PATH="$PATH:/jandig/minio-binaries/"
 
 # Install MinIO client
-COPY --from=minio/mc:RELEASE.2025-04-16T18-13-26Z /usr/bin/mc /jandig/minio-binaries/mc
+#COPY --from=quay.io/minio/minio:RELEASE.2025-04-16T18-13-26Z /usr/bin/mc /jandig/minio-binaries/mc
+COPY --from=quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z /usr/bin/mc /jandig/minio-binaries/mc
 
 COPY ./collection/ /jandig/collection/
 COPY ./etc/create_buckets.sh /jandig/create_buckets.sh
