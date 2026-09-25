@@ -25,7 +25,7 @@ if READ_DOT_ENV_FILE:
 
 DEBUG = env.bool("DJANGO_DEBUG", False)
 
-CSRF_TRUSTED_ORIGINS = ["https://*.jandig.app"]
+CSRF_TRUSTED_ORIGINS = ["https://*.jandig.app"] + env.list("DJANGO_CSRF_TRUSTED_ORIGINS", default=[])
 
 AUTHENTICATION_BACKENDS = ["config.auth_backends.EmailOrUsernameModelBackend"]
 
@@ -37,6 +37,7 @@ os.environ["LIBGL_ALWAYS_SOFTWARE"] = "1"
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 ALLOWED_HOSTS = [
+    "jandig.example.com",
     "localhost",
     "0.0.0.0",
     "127.0.0.1",
@@ -46,6 +47,7 @@ ALLOWED_HOSTS = [
 CUSTOM_ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["*"])
 ALLOWED_HOSTS += CUSTOM_ALLOWED_HOSTS
 
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 DJANGO_ADMIN_URL = env("DJANGO_ADMIN_URL", default="admin/")
 
@@ -281,10 +283,6 @@ TURNSTILE_ENABLED = env("TURNSTILE_ENABLED", default=False)
 TURNSTILE_SITE_KEY = env("TURNSTILE_SITE_KEY", default="")
 TURNSTILE_SECRET_KEY = env("TURNSTILE_SECRET_KEY", default="")
 
-# Google Tag Manager
-GOOGLE_TAG_MANAGER_ENABLED = env.bool("GOOGLE_TAG_MANAGER_ENABLED", default=False)
-GOOGLE_TAG_MANAGER_ID = env("GOOGLE_TAG_MANAGER_ID", default="")
-
 ###########################
 #### Storage settings  ####
 ###########################
@@ -311,11 +309,13 @@ else:
     USE_MINIO = os.getenv("USE_MINIO", False)
 
 if USE_MINIO:
-    AWS_S3_ENDPOINT_URL = os.getenv("MINIO_S3_ENDPOINT_URL", "http://storage:9000")
-    AWS_S3_CUSTOM_DOMAIN = f"localhost:9000/{AWS_STORAGE_BUCKET_NAME}"
+    AWS_S3_ENDPOINT_URL = os.getenv("MINIO_S3_ENDPOINT_URL", "http://jandig.example.com:9000")
+    AWS_S3_CUSTOM_DOMAIN = os.getenv(
+        "MINIO_PUBLIC_DOMAIN", f"localhost:9000/{AWS_STORAGE_BUCKET_NAME}"
+    )
     AWS_S3_USE_SSL = False
     AWS_S3_SECURE_URLS = False
-    AWS_S3_URL_PROTOCOL = "http:"
+    AWS_S3_URL_PROTOCOL = os.getenv("MINIO_PUBLIC_PROTOCOL", "http:")
 
 else:
     AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_STATIC_URL", "cdn.jandig.app")

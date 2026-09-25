@@ -52,3 +52,7 @@ TURNSTILE_SECRET_KEY=
 # Google Tag Manager
 GOOGLE_TAG_MANAGER_ENABLED=False
 GOOGLE_TAG_MANAGER_ID=
+
+MINIO_PUBLIC_DOMAIN=jandig.example.com/static/jandig-cdn
+DJANGO_CSRF_TRUSTED_ORIGINS=http://jandig.example.com,https://jandig.example.com
+MINIO_PUBLIC_PROTOCOL=https:
