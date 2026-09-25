@@ -281,6 +281,10 @@ TURNSTILE_ENABLED = env("TURNSTILE_ENABLED", default=False)
 TURNSTILE_SITE_KEY = env("TURNSTILE_SITE_KEY", default="")
 TURNSTILE_SECRET_KEY = env("TURNSTILE_SECRET_KEY", default="")
 
+# Google Tag Manager
+GOOGLE_TAG_MANAGER_ENABLED = env.bool("GOOGLE_TAG_MANAGER_ENABLED", default=False)
+GOOGLE_TAG_MANAGER_ID = env("GOOGLE_TAG_MANAGER_ID", default="")
+
 ###########################
 #### Storage settings  ####
 ###########################

@@ -17,6 +17,8 @@ def environment(**options):
             "url": reverse,
             "enumerate": enumerate,
             "CUR_LANGUAGE": translation.get_language(),
+            "GOOGLE_TAG_MANAGER_ENABLED": settings.GOOGLE_TAG_MANAGER_ENABLED,
+            "GOOGLE_TAG_MANAGER_ID": settings.GOOGLE_TAG_MANAGER_ID,
             "languages": [
                 translation.get_language_info(code)
                 for code, _name in settings.LANGUAGES
